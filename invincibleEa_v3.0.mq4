@@ -15,8 +15,8 @@
 extern bool      isUseMaCross         = true;   
 extern int       MaCross_MagicNumber  = 20181026;    
 extern double    MaCross_Lots         = 0.1;
-extern int       MaCross_intTP        = 24;
-extern int       MaCross_intSL        = 9;
+extern int       MaCross_intTP        = 15;
+extern int       MaCross_intSL        = 6;
       
 
 CMaCross* oCMaCross;

@@ -180,7 +180,7 @@ int CMaCross::EntrySignal()
    if(!oCMaOne.isStochCrossOk && oCMaOne.crossPass <10){
       double hPrice14=0,lPrice14=100;
       double hPrice100=0,lPrice100=100;
-      for(int i=1;i<=25;i++){
+      for(int i=1;i<=15;i++){
          if(m_Stoch100[i]>hPrice100){
             hPrice100 = m_Stoch100[i];
          }
@@ -201,12 +201,12 @@ int CMaCross::EntrySignal()
       Print("lPrice100 is:",lPrice100);
       Print("crossType is:",oCMaOne.crossType);
       if(oCMaOne.crossType == "up"){
-         if(lPrice14<20 && lPrice100<20){
+         if(lPrice14<18 && lPrice100<18){
             oCMaOne.isStochCrossOk = true;
          }
       }
       if(oCMaOne.crossType == "down"){
-         if(hPrice14 > 80 && hPrice100>80){
+         if(hPrice14 > 82 && hPrice100>82){
             oCMaOne.isStochCrossOk = true;
          }
       }
@@ -222,7 +222,7 @@ int CMaCross::EntrySignal()
       if(oCMaOne.crossPass <15 && Ask - m_Ma30[1]<2*oCTrade.GetPip()){
          double hl = oCMaOne.highLow;
          double pips = (Ask - hl)/oCTrade.GetPip();
-         if(pips < 10){
+         if(pips < 20){
             isOk = true;
          }
       }
@@ -240,7 +240,7 @@ int CMaCross::EntrySignal()
       if(oCMaOne.crossPass <15 && m_Ma30[1] -Bid<2*oCTrade.GetPip()){
          double hl = oCMaOne.highLow;
          double pips = (hl - Bid)/oCTrade.GetPip();
-         if(pips < 10){
+         if(pips < 20){
             isOk = true;
          }
       }
@@ -254,6 +254,7 @@ int CMaCross::EntrySignal()
 
 string CMaCross::ExitSignal()
 {
+   /*
    if( (this.StochDistance(6)>18 && m_Stoch100[1] < m_Stoch100[2] && m_Stoch100[2]<50 && m_Ma10[1]<m_Ma30[1] && Close[1]<Open[1] && Close[1] <m_Ma30[1])){
       return "exit_buy_all";
    }
@@ -261,6 +262,7 @@ string CMaCross::ExitSignal()
    if((this.StochDistance(6)>18 && m_Stoch100[1] > m_Stoch100[2] && m_Stoch100[2]>50 && m_Ma10[1]>m_Ma30[1]  && Close[1]>Open[1] && Close[1] >m_Ma30[1])){
       return "exit_sell_all";
    }
+   */
    return "none";
 }
 
@@ -282,32 +284,51 @@ void CMaCross::Protect()
 {
    double stoploss;
    int ordertype;
-   double oop;
+   double oop,otp;
    if(m_ticket_slow != 0){
       stoploss = oCTrade.GetOrderStopLoss(m_ticket_slow);
       ordertype = oCTrade.GetOrderType(m_ticket_slow);
       oop = oCTrade.GetOrderOpenPrice(m_ticket_slow);
+      otp = oCTrade.GetOrderTakeProfit(m_ticket_slow);
       if(stoploss != -1){
          if(ordertype == OP_BUY){
-            if((stoploss == 0 || stoploss - oop <1*oCTrade.GetPip()) && Close[1] - oop > 6*oCTrade.GetPip() && Ask - oop > 6*oCTrade.GetPip()){
-               oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop + 1*oCTrade.GetPip(), Digits));
+            if((stoploss == 0 || stoploss - oop <-3*oCTrade.GetPip()) && Close[1] - oop > 5*oCTrade.GetPip() && Ask - oop > 5*oCTrade.GetPip()){
+               //oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop + 1*oCTrade.GetPip(), Digits));
+               oCTrade.ModifySl(m_ticket_slow,NormalizeDouble(oop - 2*oCTrade.GetPip(), Digits));
             }
-            if((stoploss == 0 || stoploss - oop <3*oCTrade.GetPip()) && Close[1] - oop > 15*oCTrade.GetPip() && Ask - oop > 15*oCTrade.GetPip()){
-               oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop + 5*oCTrade.GetPip(), Digits));
+            if((stoploss == 0 || stoploss - oop <2*oCTrade.GetPip()) && Close[1] - oop > 10*oCTrade.GetPip() && Ask - oop > 10*oCTrade.GetPip()){
+               //oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop + 5*oCTrade.GetPip(), Digits));
+               oCTrade.ModifySl(m_ticket_slow,NormalizeDouble(oop +5*oCTrade.GetPip(), Digits));
+               if(otp >0 && (otp - oop)<13*oCTrade.GetPip()){
+                  oCTrade.ModifyTp(m_ticket_slow,NormalizeDouble(oop +18*oCTrade.GetPip(), Digits));
+               }
             }
-            if((stoploss == 0 || stoploss - oop <7*oCTrade.GetPip()) && Close[1] - oop > 20*oCTrade.GetPip() && Ask - oop > 20*oCTrade.GetPip()){
-               oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop + 10*oCTrade.GetPip(), Digits));
+            if((stoploss == 0 || stoploss - oop <6*oCTrade.GetPip()) && Close[1] - oop > 15*oCTrade.GetPip() && Ask - oop > 15*oCTrade.GetPip()){
+               //oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop + 5*oCTrade.GetPip(), Digits));
+               oCTrade.ModifySl(m_ticket_slow,NormalizeDouble(oop +10*oCTrade.GetPip(), Digits));
+               if(otp >0 && (otp - oop)<19*oCTrade.GetPip()){
+                  oCTrade.ModifyTp(m_ticket_slow,NormalizeDouble(oop +26*oCTrade.GetPip(), Digits));
+               }
             }
          }
          if(ordertype == OP_SELL){
-            if((stoploss == 0 || oop - stoploss <1*oCTrade.GetPip()) &&  oop - Close[1] > 6*oCTrade.GetPip() && oop - Bid > 6*oCTrade.GetPip()){
-               oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop - 1*oCTrade.GetPip(), Digits));
+            if((stoploss == 0 || oop - stoploss <-3*oCTrade.GetPip()) &&  oop - Close[1] > 5*oCTrade.GetPip() && oop - Bid > 5*oCTrade.GetPip()){
+               //oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop - 1*oCTrade.GetPip(), Digits));
+               oCTrade.ModifySl(m_ticket_slow,NormalizeDouble(oop + 2*oCTrade.GetPip(), Digits));
             }
-            if((stoploss == 0 || oop - stoploss <3*oCTrade.GetPip()) &&  oop - Close[1] > 15*oCTrade.GetPip() && oop - Bid > 15*oCTrade.GetPip()){
-               oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop - 5*oCTrade.GetPip(), Digits));
+            if((stoploss == 0 || oop - stoploss <2*oCTrade.GetPip()) &&  oop - Close[1] > 10*oCTrade.GetPip() && oop - Bid > 10*oCTrade.GetPip()){
+               //oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop - 5*oCTrade.GetPip(), Digits));
+               oCTrade.ModifySl(m_ticket_slow,NormalizeDouble(oop -5*oCTrade.GetPip(), Digits));
+               if(otp >0 && (oop - otp)<13*oCTrade.GetPip()){
+                  oCTrade.ModifyTp(m_ticket_slow,NormalizeDouble(oop -18*oCTrade.GetPip(), Digits));
+               }
             }
-            if((stoploss == 0 || oop - stoploss <7*oCTrade.GetPip()) &&  oop - Close[1] > 20*oCTrade.GetPip() && oop - Bid > 20*oCTrade.GetPip()){
-               oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop - 10*oCTrade.GetPip(), Digits));
+            if((stoploss == 0 || oop - stoploss <7*oCTrade.GetPip()) &&  oop - Close[1] > 15*oCTrade.GetPip() && oop - Bid > 15*oCTrade.GetPip()){
+               //oCTrade.Modify(m_ticket_slow, oop, NormalizeDouble(oop - 10*oCTrade.GetPip(), Digits));
+               oCTrade.ModifySl(m_ticket_slow,NormalizeDouble(oop -10*oCTrade.GetPip(), Digits));
+               if(otp >0 && (oop - otp)<19*oCTrade.GetPip()){
+                  oCTrade.ModifyTp(m_ticket_slow,NormalizeDouble(oop -26*oCTrade.GetPip(), Digits));
+               }
             }
          }
       }

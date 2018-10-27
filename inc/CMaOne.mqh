@@ -28,7 +28,7 @@ class CMaOne
       };
       void AddCol();
       void Reset();
-      void SetCross(string ct, double cp);
+      void SetCross(string ct, double cp, double hl);
       bool IsCanOpenBuy();
       bool IsCanOpenSell();
 };
