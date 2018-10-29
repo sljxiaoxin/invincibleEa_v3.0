@@ -30,9 +30,10 @@ class CStochOne
       };
       void AddCol();
       void Reset();
-      void SetCross(string ct, double cp, double hl);
+      void SetCross(string ct);
       bool IsCanOpenBuy();
       bool IsCanOpenSell();
+      void SetCrossPrice(double cp);
 };
 
 void CStochOne::AddCol()
