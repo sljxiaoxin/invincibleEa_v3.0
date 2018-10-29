@@ -58,6 +58,8 @@ class CStochCross
       double GetCrossPriceDistanceLow(int counts);
       double GetStoch14Lowest(int counts);
       double GetStoch14Highest(int counts);
+      double GetStoch100Lowest(int counts);
+      double GetStoch100Highest(int counts);
       double GetPriceDistance(int counts);
       
 };
@@ -276,6 +278,10 @@ void CStochCross::Protect()
       double high = this.GetCrossPriceDistanceHigh(10);
       double low = this.GetCrossPriceDistanceLow(10);
       double close = Close[1];
+      double stochHigh = GetStoch100Highest(10);
+      double stochLow = GetStoch100Lowest(10);
+      double stochNow = m_Stoch100[1];
+      
       
    }
 
@@ -372,6 +378,26 @@ double CStochCross::GetStoch14Highest(int counts){
    for(int i=1;i<counts;i++){
       if(m_Stoch14[i]>high){
          high = m_Stoch14[i];
+      }
+   }
+   return high;
+}
+
+double CStochCross::GetStoch100Lowest(int counts){
+   double low = 9999;
+   for(int i=1;i<counts;i++){
+      if(m_Stoch100[i]<low){
+         low = m_Stoch100[i];
+      }
+   }
+   return low;
+}
+
+double CStochCross::GetStoch100Highest(int counts){
+   double high = -1;
+   for(int i=1;i<counts;i++){
+      if(m_Stoch100[i]>high){
+         high = m_Stoch100[i];
       }
    }
    return high;
