@@ -29,12 +29,13 @@ class CStochBase
       double m_Stoch14[30];
       double m_Stoch100[30];
       
+      CTrade* oCTradeBase;
       
    public:
-      CTrade* oCTrade;
       
-      CStochBase(int Magic){
-        oCTrade = new CTrade(Magic);
+      
+      CStochBase(CTrade* oCTrade){
+        oCTradeBase = oCTrade;
       };
       
       void FillData();
@@ -50,15 +51,11 @@ void CStochBase::FillData()
       m_Stoch14[i] = iStochastic(NULL, PERIOD_M1, 14, 3, 3, MODE_SMA, 0, MODE_MAIN, i);
       m_Stoch100[i] = iStochastic(NULL, PERIOD_M1, 100, 3, 3, MODE_SMA, 0, MODE_MAIN, i);
    }
-   OrderOpenPass += 1;
-   oCStochOne.AddCol();
-   if(m_ticket != 0 && oCTrade.isOrderClosed(m_ticket)){
-      m_ticket = 0;
-   }
-   if(m_ticket == 0){
-      OrderOpenPass  = 0;
-   }
-   Print("m_ticket=",m_ticket);
+}
+
+void CStochBase::TickBase()
+{
+   this.FillData();
 }
 
 void CStochBase::AddCol()
