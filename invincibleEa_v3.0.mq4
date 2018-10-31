@@ -22,8 +22,8 @@ extern int       MaCross_intSL        = 6;
 extern bool      isUseStochCross         = true;   
 extern int       StochCross_MagicNumber  = 20181026;    
 extern double    StochCross_Lots         = 0.1;
-extern int       StochCross_intTP        = 12;
-extern int       StochCross_intSL        = 8;
+extern int       StochCross_intTP        = 20;
+extern int       StochCross_intSL        = 20;
       
 
 CMaCross* oCMaCross;
